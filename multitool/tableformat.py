@@ -4,20 +4,20 @@
 class TableFormatter:
     def headings(self, headers):
         '''
-        Emit the table headings
+        Output the table headings
         '''
         raise NotImplementedError()
 
     def row(self, rowdata):
         '''
-        Emit a single row of table data
+        Output single row of table data
         '''
         raise NotImplementedError()
 
 
 class TextTableFormatter(TableFormatter):
     '''
-    Emit a table in plain-text format
+    Output data in plain-text format
     '''
     def headings(self, headers):
         for h in headers:
@@ -33,7 +33,7 @@ class TextTableFormatter(TableFormatter):
 
 class CSVTableFormatter(TableFormatter):
     '''
-    Output portfolio data in CSV format.
+    Output data in CSV format.
     '''
     def headings(self, headers):
         print(','.join(headers))
@@ -44,7 +44,7 @@ class CSVTableFormatter(TableFormatter):
 
 class HTMLTableFormatter(TableFormatter):
     '''
-    Output portfolio data in CSV format.
+    Output data in HTML format.
     '''
     def headings(self, headers):
         print('<tr>', end='')
@@ -59,6 +59,33 @@ class HTMLTableFormatter(TableFormatter):
         print('</tr>')
 
 
+class MDTableFormatter(TableFormatter):
+    '''
+    Output data in GH Markdown format
+    '''
+    def headings(self, headers):
+        for x, h in enumerate(headers):
+            if (x == 0):
+                print(f'{h} ', end='')
+            else:
+                print(f'| {h} ', end='')
+        print()
+        for i, h in enumerate(headers):
+            if (i == 0):
+                print('-'*len(h) + ' ', end='')
+            else:
+                print('| ' + '-'*len(h) + ' ', end='')
+        print()
+
+    def row(self, rowdata):
+        for x, row in enumerate(rowdata):
+            if (x == 0):
+                print(f'{row} ', end='')
+            else:
+                print(f'| {row} ', end='')
+        print()
+
+
 def create_formatter(name):
     '''Create formatter object in specified format'''
     if name == 'txt':
@@ -67,6 +94,8 @@ def create_formatter(name):
         return CSVTableFormatter()
     elif name == 'html':
         return HTMLTableFormatter()
+    elif name == 'md':
+        return MDTableFormatter()
     else:
         raise FormatError(f'Unknown table format {name}')
 
