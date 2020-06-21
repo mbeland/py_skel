@@ -3,87 +3,84 @@
 
 class TableFormatter:
     def headings(self, headers):
-        '''
-        Output the table headings
-        '''
+        '''Output the table headings'''
         raise NotImplementedError()
 
     def row(self, rowdata):
-        '''
-        Output single row of table data
-        '''
+        '''Output single row of table data'''
         raise NotImplementedError()
 
 
 class TextTableFormatter(TableFormatter):
-    '''
-    Output data in plain-text format
-    '''
+    '''Output data in plain-text format'''
     def headings(self, headers):
+        s = ''
         for h in headers:
-            print(f'{h:>10s}', end=' ')
-        print()
-        print(('-'*10 + ' ')*len(headers))
+            s = s + (f'{h:>10s}')
+        s = s + '\n'
+        s = s + (('-'*10 + ' ')*len(headers))
+        return s
 
     def row(self, rowdata):
+        s = ''
         for d in rowdata:
-            print(f'{d:>10s}', end=' ')
-        print()
+            s = s + (f'{d:>10s}')
+        return s
 
 
 class CSVTableFormatter(TableFormatter):
-    '''
-    Output data in CSV format.
-    '''
+    '''Output data in CSV format.'''
     def headings(self, headers):
-        print(','.join(headers))
+        s = ','.join(headers)
+        return s
 
     def row(self, rowdata):
-        print(','.join(rowdata))
+        s = ','.join(rowdata)
+        return s
 
 
 class HTMLTableFormatter(TableFormatter):
-    '''
-    Output data in HTML format.
-    '''
+    '''Output data in HTML format.'''
     def headings(self, headers):
-        print('<tr>', end='')
+        s = '<tr>'
         for h in headers:
-            print(f'<th>{h}</th>', end='')
-        print('</tr>')
+            s = s + f'<th>{h}</th>'
+        s = s + ('</tr>')
+        return s
 
     def row(self, rowdata):
-        print('<tr>', end='')
+        s = '<tr>'
         for d in rowdata:
-            print(f'<td>{d}</td>', end='')
-        print('</tr>')
+            s = s + f'<td>{d}</td>'
+        s = s + '</tr>'
+        return s
 
 
 class MDTableFormatter(TableFormatter):
-    '''
-    Output data in GH Markdown format
-    '''
+    '''Output data in GH Markdown format'''
     def headings(self, headers):
+        s = ''
         for x, h in enumerate(headers):
             if (x == 0):
-                print(f'{h} ', end='')
+                s = s + f'{h} '
             else:
-                print(f'| {h} ', end='')
-        print()
+                s = s + f'| {h} '
+        s = s + '\n'
         for i, h in enumerate(headers):
             if (i == 0):
-                print('-'*len(h) + ' ', end='')
+                s = s + '-'*len(h) + ' '
             else:
-                print('| ' + '-'*len(h) + ' ', end='')
-        print()
+                s = s + '| ' + '-'*len(h) + ' '
+        return s
 
     def row(self, rowdata):
+        s = ''
         for x, row in enumerate(rowdata):
             if (x == 0):
-                print(f'{row} ', end='')
+                s = s + f'{row} '
             else:
-                print(f'| {row} ', end='')
-        print()
+                s = s + f'| {row} '
+        return s
 
 
 def create_formatter(name):
@@ -102,10 +99,11 @@ def create_formatter(name):
 
 def print_table(data, headers, formatter):
     '''Generic table formatting function using formatters'''
-    formatter.headings(headers)
+    s = str(formatter.headings(headers))
     for obj in data:
         rowdata = [str(getattr(obj, name)) for name in headers]
-        formatter.row(rowdata)
+        s = s + str(formatter.row(rowdata))
+    return s
 
 
 class FormatError(Exception):
