@@ -26,6 +26,7 @@ The template provides a simple PEP8-compliant shell for creating new code, inclu
 
   * [multitool/log.py](https://github.com/mbeland/py_skel/blob/release/multitool/log.py) - a class definition for the standard logging module, making one-line consistent creation of error logs straighforward.
   
+  * [multitool/sshclient.py](https://github.com/mbeland/py_skel/blob/release/multitool/sshclient.py) - a Paramiko wrapper to standardize the use of SSH for programmatic functions. Requires installation of Paramiko and all optional packages; recommend using ```python -m pip install paramiko[all]```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

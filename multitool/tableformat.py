@@ -16,7 +16,7 @@ class TextTableFormatter(TableFormatter):
     def headings(self, headers):
         s = ''
         for h in headers:
-            s = s + (f'{h:>10s}')
+            s = s + (f'{h:>10s} ')
         s = s + '\n'
         s = s + (('-'*10 + ' ')*len(headers))
         return s
